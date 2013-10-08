@@ -20,6 +20,13 @@ package com.isaacjg.JaJ;
 public class JsonPrimitive extends JsonData {
 	private long data;
 	
+	public static JsonPrimitive parse(String json) {
+		JsonPrimitive primitive;
+		String[] tokens = json.split(":");
+		primitive = new JsonPrimitive(tokens[0].trim().replace("\"", ""), Long.parseLong(tokens[1].trim().replace(",", "")));
+		return primitive;
+	}
+	
 	public JsonPrimitive(String name, long data) {
 		super(name);
 		this.data = data;

@@ -21,6 +21,17 @@ import java.util.ArrayList;
 
 public class JsonStringArray extends JsonArray<String> {
 	
+	public static JsonStringArray parse(String json) {
+		JsonStringArray stringArray;
+		String[] tokens = json.split(":");
+		ArrayList<String> data = new ArrayList<String>();
+		for (String token : tokens[1].split(",")) {
+			data.add(token.trim().replace("\"", ""));
+		}
+		stringArray = new JsonStringArray(tokens[0].trim().replace("\"", ""), data);
+		return stringArray;
+	}
+	
 	public JsonStringArray(String name) {
 		super(name);
 	}

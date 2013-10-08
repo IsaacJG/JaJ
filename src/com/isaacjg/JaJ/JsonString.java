@@ -20,6 +20,15 @@ package com.isaacjg.JaJ;
 public class JsonString extends JsonData {
 	private String data;
 	
+	public static JsonString parse(String json) {
+		JsonString string;
+		String[] tokens = json.split(":");
+		String data = tokens[1].trim().replace("\"", "");
+		if (data.endsWith(",")) data = data.substring(0, data.length() - 2);
+		string = new JsonString(tokens[0].trim().replace("\"", ""), data);
+		return string;
+	}
+	
 	public JsonString(String name, String data) {
 		super(name);
 		this.data = data;

@@ -1,5 +1,7 @@
 package com.isaacjg.JaJ;
 
+import java.util.ArrayList;
+
 /*
  * This file is part of JaJ.
  *
@@ -17,16 +19,26 @@ package com.isaacjg.JaJ;
  * along with JaJ.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public abstract class JsonData {
-	private String name;
-	
-	public abstract String jsonify();
-	
-	public JsonData(String name) {
-		this.name = name;
+public class JsonIntArray extends JsonArray<Long> {
+
+	public static JsonIntArray parse(String json) {
+		JsonIntArray intArray;
+		String[] tokens = json.split(":");
+		ArrayList<Long> data = new ArrayList<Long>();
+		for (String token : tokens[1].split(",")) {
+			token = token.replace("[", "").replace("]", "").trim();
+			if (!token.isEmpty())
+				data.add(Long.parseLong(token));
+		}
+		intArray = new JsonIntArray(tokens[0].trim().replace("\"", ""), data);
+		return intArray;
 	}
 	
-	public String getName() {
-		return name;
+	public JsonIntArray(String name) {
+		super(name);
+	}
+	
+	public JsonIntArray(String name, ArrayList<Long> data) {
+		super(name, data);
 	}
 }

@@ -41,7 +41,8 @@ public class JsonArray<T> extends JsonData {
 		for (int i = 0; i < data.size() - 1; i++) {
 			json += data.get(i) + ", ";
 		}
-		json += data.get(data.size() - 1) + "]";
+		if (data.size() > 0) json += data.get(data.size() - 1) + "]";
+		else json += "]";
 		return json;
 	}
 }

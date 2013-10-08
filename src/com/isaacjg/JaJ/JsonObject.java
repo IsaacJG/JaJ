@@ -22,6 +22,39 @@ import java.util.ArrayList;
 public class JsonObject extends JsonData {
 	private ArrayList<JsonData> data;
 	
+	public static JsonObject parse(String json) {
+		JsonObject object;
+		String[] tokens = json.split(":");
+		ArrayList<JsonData> data = new ArrayList<JsonData>();
+		for (String token : tokens[1].split(",")) {
+			switch (JaJ.classify(token.split(":")[1])) {
+			case PRIMITIVE:
+				data.add(JsonPrimitive.parse(token));
+				break;
+			case STRING:
+				data.add(JsonString.parse(token));
+				break;
+			case ARRAY:
+				switch (JaJ.classifyArray(token)) {
+				case PRIM_ARRAY:
+					data.add(JsonIntArray.parse(token));
+					break;
+				case STRING_ARRAY:
+					data.add(JsonStringArray.parse(token));
+					break;
+				default: break;
+				}
+				break;
+			case OBJECT:
+				data.add(JsonObject.parse(token));
+				break;
+			default: break;
+			}
+		}
+		object = new JsonObject(tokens[0].trim().replace("\"", ""), data);
+		return object;
+	}
+	
 	public JsonObject(String name) {
 		super(name);
 		data = new ArrayList<JsonData>();
@@ -42,7 +75,8 @@ public class JsonObject extends JsonData {
 		for (int i = 0; i < data.size() - 1; i++) {
 			dataString += '\t' + data.get(i).jsonify() + ",\n";
 		}
-		dataString += '\t' + data.get(data.size() - 1).jsonify() + '\n';
+		if (data.size() > 0) dataString += '\t' + data.get(data.size() - 1).jsonify() + '\n';
+		else dataString += "\n";
 		json = '\"' + getName() + "\": {\n" + dataString + '}';
 		return json;
 	}

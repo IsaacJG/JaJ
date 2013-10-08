@@ -1,5 +1,7 @@
 *.class
-
+/.idea
+*.iml
+*.eml
 # Package Files #
 *.jar
 *.war

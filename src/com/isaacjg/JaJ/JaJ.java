@@ -22,6 +22,28 @@ import java.util.ArrayList;
 
 public class JaJ {
 	
+	public static void main(String[] args) {
+		ArrayList<JsonData> data = new ArrayList<JsonData>();
+		data.add(new JsonString("name", "pro stuff"));
+		data.add(new JsonPrimitive("long", 12132341));
+		
+		ArrayList<Long> longStuff = new ArrayList<Long>();
+		longStuff.add(900L);
+		longStuff.add(9123L);
+		longStuff.add(123L);
+		data.add(new JsonIntArray("number array", longStuff));
+
+        ArrayList<String> stringStuff = new ArrayList<String>();
+        stringStuff.add("this is a string");
+        stringStuff.add("here we go");
+        data.add(new JsonStringArray("string array", stringStuff));
+
+		//System.out.println(jsonify(data));
+		//data = load("{\"name\": \"pro stuff\", \"long\": 12132341, \"nubmer array\": [1123, 10, 9]}");
+		//data = load(jsonify(data));
+		System.out.println(jsonify(data));
+	}
+	
 	public static String jsonify(ArrayList<JsonData> data) {
 		String json = "{\n";
 		for (int i = 0; i < data.size() - 1; i++) {
@@ -29,5 +51,87 @@ public class JaJ {
 		}
 		json += '\t' + data.get(data.size() - 1).jsonify() + "\n}";
 		return json;
+	}
+	
+	@SuppressWarnings("incomplete-switch")
+	public static ArrayList<JsonData> load(String json) {
+		ArrayList<JsonData> data = new ArrayList<JsonData>();
+		json = json.trim().substring(1).substring(0, json.length()-2).trim();
+		json = json.replace("\t", "").replace("\n", "").replace("\r", "");
+		String[] parts = json.split(",");
+		int i = 0;
+		boolean lookingForArray = false;
+		while (i < parts.length) {
+			if (parts[i].contains("[")) {
+				int j = i + 1;
+				lookingForArray = true;
+				while (j < parts.length && lookingForArray) {
+					if (parts[j].contains("]")) {
+						lookingForArray = false;
+						String built = parts[i];
+						for (int k = i+1; k < j+1; k++) {
+							built += ", " + parts[k].trim();
+						}
+						parts[i] = built;
+						int k = j;
+						while (k > i) {
+							parts[k] = "";
+							k--;
+						}
+					}
+					j++;
+				}
+			}
+			i++;
+		}
+		for (String part : parts) {
+			if (!part.trim().isEmpty()) {
+				String info = part.split(":")[1].trim();
+				switch (classify(info)) {
+				case PRIMITIVE:
+					data.add(JsonPrimitive.parse(part));
+					break;
+				case STRING:
+					data.add(JsonString.parse(part));
+					break;
+				case ARRAY:
+					switch (classifyArray(info)) {
+					case PRIM_ARRAY:
+						data.add(JsonIntArray.parse(part));
+						break;
+					case STRING_ARRAY:
+						data.add(JsonStringArray.parse(part));
+						break;
+					}
+                    break;
+				case OBJECT:
+					data.add(JsonObject.parse(part));
+					break;
+				}
+			}
+		}
+		return data;
+	}
+	
+	public static JsonType classify(String data) {
+		if (data.startsWith("[") && data.endsWith("]")) {
+			return JsonType.ARRAY;
+		} else if (data.startsWith("{") && data.endsWith("}")) {
+			return JsonType.OBJECT;
+		} else {
+			for (int i = 0; i < data.length(); i++) {
+				if (!("0123456789".contains("" + data.charAt(i)))) {
+					return JsonType.STRING;
+				}
+			}
+			return JsonType.PRIMITIVE;
+		}
+	}
+	
+	public static JsonType classifyArray(String data) {
+		if (data.startsWith("[\"") && data.endsWith("\"]")) {
+			return JsonType.STRING_ARRAY;
+		}
+		return JsonType.PRIM_ARRAY;
 	}
 }
