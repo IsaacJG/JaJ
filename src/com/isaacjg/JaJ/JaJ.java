@@ -22,28 +22,6 @@ import java.util.ArrayList;
 
 public class JaJ {
 	
-	public static void main(String[] args) {
-		ArrayList<JsonData> data = new ArrayList<JsonData>();
-		data.add(new JsonString("name", "pro stuff"));
-		data.add(new JsonPrimitive("long", 12132341));
-		
-		ArrayList<Long> longStuff = new ArrayList<Long>();
-		longStuff.add(900L);
-		longStuff.add(9123L);
-		longStuff.add(123L);
-		data.add(new JsonIntArray("number array", longStuff));
-
-        ArrayList<String> stringStuff = new ArrayList<String>();
-        stringStuff.add("this is a string");
-        stringStuff.add("here we go");
-        data.add(new JsonStringArray("string array", stringStuff));
-
-		//System.out.println(jsonify(data));
-		//data = load("{\"name\": \"pro stuff\", \"long\": 12132341, \"nubmer array\": [1123, 10, 9]}");
-		//data = load(jsonify(data));
-		System.out.println(jsonify(data));
-	}
-	
 	public static String jsonify(ArrayList<JsonData> data) {
 		String json = "{\n";
 		for (int i = 0; i < data.size() - 1; i++) {
