@@ -24,9 +24,11 @@ public class JsonObject extends JsonData {
 	
 	public static JsonObject parse(String json) {
 		JsonObject object;
-		String[] tokens = json.split(":");
+		String name = json.split(":")[0].replace("\"", "").trim();
+		json = json.substring(name.length()+4).replace("{", "").replace("}", "").trim();
+		String[] tokens = json.split(",");
 		ArrayList<JsonData> data = new ArrayList<JsonData>();
-		for (String token : tokens[1].split(",")) {
+		for (String token : tokens) {
 			switch (JaJ.classify(token.split(":")[1])) {
 			case PRIMITIVE:
 				data.add(JsonPrimitive.parse(token));
@@ -51,7 +53,7 @@ public class JsonObject extends JsonData {
 			default: break;
 			}
 		}
-		object = new JsonObject(tokens[0].trim().replace("\"", ""), data);
+		object = new JsonObject(name, data);
 		return object;
 	}
 	

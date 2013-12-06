@@ -62,9 +62,40 @@ public class JaJ {
 			}
 			i++;
 		}
+        i = 0;
+        lookingForArray = false;
+        while (i < parts.length) {
+            if (parts[i].contains("{")) {
+                int j = i + 1;
+                lookingForArray = true;
+                while (j < parts.length && lookingForArray) {
+                    if (parts[j].contains("}")) {
+                        lookingForArray = false;
+                        String built = parts[i];
+                        for (int k = i+1; k < j+1; k++) {
+                            built += ", " + parts[k].trim();
+                        }
+                        parts[i] = built;
+                        int k = j;
+                        while (k > i) {
+                            parts[k] = "";
+                            k--;
+                        }
+                    }
+                    j++;
+                }
+            }
+            i++;
+        }
 		for (String part : parts) {
 			if (!part.trim().isEmpty()) {
-				String info = part.split(":")[1].trim();
+				String[] hold = part.split(":");
+				if (hold.length > 2) {
+					for (int ii = 2; ii < hold.length; ii++) {
+						hold[1] += ": " + hold[ii].trim();
+					}
+				}
+				String info = hold[1].trim();
 				switch (classify(info)) {
 				case PRIMITIVE:
 					data.add(JsonPrimitive.parse(part));

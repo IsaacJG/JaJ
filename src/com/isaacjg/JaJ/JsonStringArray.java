@@ -26,7 +26,7 @@ public class JsonStringArray extends JsonArray<String> {
 		String[] tokens = json.split(":");
 		ArrayList<String> data = new ArrayList<String>();
 		for (String token : tokens[1].split(",")) {
-			data.add(token.trim().replace("\"", ""));
+			data.add(token.trim().replace("\"", "").replace("[", "").replace("]", ""));
 		}
 		stringArray = new JsonStringArray(tokens[0].trim().replace("\"", ""), data);
 		return stringArray;
