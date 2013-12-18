@@ -20,7 +20,11 @@ import java.util.ArrayList;
  */
 
 public class JsonIntArray extends JsonArray<Long> {
-
+    /**
+     * Parse a string of JSON
+     * @param json the string of JSON
+     * @return a JsonIntArray object containing the parsed int array
+     */
 	public static JsonIntArray parse(String json) {
 		JsonIntArray intArray;
 		String[] tokens = json.split(":");

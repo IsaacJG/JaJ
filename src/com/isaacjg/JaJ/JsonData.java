@@ -17,15 +17,29 @@ package com.isaacjg.JaJ;
  * along with JaJ.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Base class of all JSON data
+ */
 public abstract class JsonData {
 	private String name;
-	
+
+    /**
+     * Serialize this object into JSON
+     * @return JSON representation of this object
+     */
 	public abstract String jsonify();
-	
+
+    /**
+     * @param name the name of the data
+     */
 	public JsonData(String name) {
 		this.name = name;
 	}
-	
+
+    /**
+     * Get the name of the data
+     * @return the name of the data
+     */
 	public String getName() {
 		return name;
 	}

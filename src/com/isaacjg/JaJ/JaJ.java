@@ -20,8 +20,17 @@ import java.util.ArrayList;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * JaJ - Object Oriented JSON in java
+ *
+ * @author Isaac Grant
+ */
 public class JaJ {
-	
+    /**
+     * Turn an ArrayList of JsonData to a (somewhat) formatted string
+     * @param data ArrayList to turn into a string
+     * @return The formatted string
+     */
 	public static String jsonify(ArrayList<JsonData> data) {
 		String json = "{\n";
 		for (int i = 0; i < data.size() - 1; i++) {
@@ -30,7 +39,12 @@ public class JaJ {
 		json += '\t' + data.get(data.size() - 1).jsonify() + "\n}";
 		return json;
 	}
-	
+
+    /**
+     * Load a json string into an ArrayList of JsonData
+     * @param json JSON string
+     * @return ArrayList of parsed JsonData
+     */
 	@SuppressWarnings("incomplete-switch")
 	public static ArrayList<JsonData> load(String json) {
 		ArrayList<JsonData> data = new ArrayList<JsonData>();
@@ -121,7 +135,13 @@ public class JaJ {
 		}
 		return data;
 	}
-	
+
+    /**
+     * Utility function to classify a string of JSON
+     *
+     * @param data JSON to classify
+     * @return JsonType describing the type of the given JSON
+     */
 	public static JsonType classify(String data) {
 		if (data.startsWith("[") && data.endsWith("]")) {
 			return JsonType.ARRAY;
@@ -136,7 +156,13 @@ public class JaJ {
 			return JsonType.PRIMITIVE;
 		}
 	}
-	
+
+    /**
+     * Utility function to classify a string of JSON that has previously been identified as an array
+     *
+     * @param data JSON to classify
+     * @return JsonType describing the type of array given
+     */
 	public static JsonType classifyArray(String data) {
 		if (data.startsWith("[\"") && data.endsWith("\"]")) {
 			return JsonType.STRING_ARRAY;
