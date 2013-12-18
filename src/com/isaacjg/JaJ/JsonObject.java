@@ -21,7 +21,11 @@ import java.util.ArrayList;
 
 public class JsonObject extends JsonData {
 	private ArrayList<JsonData> data;
-	
+
+    /**
+     * @param json raw JSON from which to parse an object
+     * @return a new JsonObject containing the parsed data
+     */
 	public static JsonObject parse(String json) {
 		JsonObject object;
 		String name = json.split(":")[0].replace("\"", "").trim();
@@ -66,10 +70,43 @@ public class JsonObject extends JsonData {
 		super(name);
 		this.data = data;
 	}
-	
+
+    /**
+     * Add new JsonData to the object
+     * @param newData JsonData to add
+     */
 	public void addData(JsonData newData) {
 		data.add(newData);
 	}
+
+    /**
+     * Search the object for a JsonData name
+     * @param name the name of the JsonData
+     * @return the JsonData with a matching name, or null if not found
+     */
+    public JsonData get(String name) {
+        for (JsonData element : data) {
+            if (name.equals(element.getName())) return element;
+        }
+        return null;
+    }
+
+    /**
+     * Get the JsonData at a given index
+     * @param index index of the JsonData
+     * @return the JsonData at the given index
+     */
+    public JsonData get(int index) {
+        return data.get(index);
+    }
+
+    /**
+     * Get all data contained in this object
+     * @return the ArrayList used to hold this object's data
+     */
+    public ArrayList<JsonData> getData() {
+        return data;
+    }
 	
 	public String jsonify() {
 		String json;

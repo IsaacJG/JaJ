@@ -17,6 +17,10 @@ package com.isaacjg.JaJ;
  * along with JaJ.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Json String type
+ * Holds data in a String
+ */
 public class JsonString extends JsonData {
 	private String data;
 	
@@ -33,7 +37,11 @@ public class JsonString extends JsonData {
 		super(name);
 		this.data = data;
 	}
-	
+
+    public String getData() {
+        return data;
+    }
+
 	public String jsonify() {
 		return "\"" + getName() + "\": \"" + data + "\"";
 	}
